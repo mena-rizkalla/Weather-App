@@ -1,31 +1,42 @@
 package com.example.weather
 
+import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.weather.ui.theme.MyAppTheme
 import com.example.weather.ui.theme.WeatherTheme
+import com.example.weather.weather.presentation.weatherScreen.WeatherScreen
+
+import com.example.weather.weather.presentation.weatherScreen.WeatherViewModel
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            WeatherTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+
+            val viewModel: WeatherViewModel = koinViewModel()
+            val uiState by viewModel.uiState.collectAsState()
+
+
+            MyAppTheme (darkTheme = uiState.isDarkTheme) {
+                WeatherScreen(
+                    viewModel = viewModel
+                )
             }
+
         }
     }
 }
