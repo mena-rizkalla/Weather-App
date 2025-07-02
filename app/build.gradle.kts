@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -19,12 +21,19 @@ android {
     }
 
     buildTypes {
+
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://api.open-meteo.com/v1/forecast\"")
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            buildConfigField("String", "BASE_URL", "\"https://api.open-meteo.com/v1/forecast\"")
         }
     }
     compileOptions {
@@ -36,6 +45,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -56,4 +66,34 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    // Ktor core client
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    // Engine for Android
+    implementation(libs.ktor.client.android)
+
+    // For JSON serialization
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+
+    // For logging (optional but recommended)
+    implementation(libs.ktor.client.logging)
+
+    // Other dependencies
+    implementation(libs.kotlinx.serialization.json)
+
+
+    implementation(libs.koin.android)
+    // Koin for ViewModel
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
+    // Accompanist for easy permission handling in Compose
+    implementation(libs.accompanist.permissions)
+
+    // Google Play Services for location
+    implementation(libs.play.services.location)
+
 }

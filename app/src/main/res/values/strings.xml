@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Weather</string>
+    <string name="error_request_timeout">The request time out</string>
+    <string name="error_too_many_requests">Too many requests</string>
+    <string name="error_no_internet">No internet conncection\n\n</string>
+    <string name="server_error">Something went wrong please try again later</string>
+    <string name="error_serialization">Couldn\'t serialize or deserialize date\n</string>
+    <string name="unknown_error">Something went wrong\n</string>
 </resources>
